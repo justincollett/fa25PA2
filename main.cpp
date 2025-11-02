@@ -89,7 +89,6 @@ int createLeafNodes(int freq[]) {
 
 // Step 3: Build the encoding tree using heap operations
 int buildEncodingTree(int nextFree) {
-    // TODO:
     MinHeap messageHeap; // 1. Create a MinHeap object.
     for (int i = 0; i < nextFree; i++) // 2. Push all leaf node indices into the heap.
     {
@@ -97,27 +96,35 @@ int buildEncodingTree(int nextFree) {
     }
     while (messageHeap.size > 1) // 3. While the heap size is greater than 1:
     {
-        int leftNodeIndex = messageHeap.pop(weightArr); //    - Pop two smallest nodes
+        int leftNodeIndex = messageHeap.pop(weightArr); // Pop two smallest nodes
         int rightNodeIndex = messageHeap.pop(weightArr);
-        int parentIndex = nextFree++; //    - Create a new parent node with combined weight
+        int parentIndex = nextFree++; // Create a new parent node with combined weight
         weightArr[parentIndex] = weightArr[leftNodeIndex] + weightArr[rightNodeIndex];
 
-        leftArr[parentIndex] = leftNodeIndex; //    - Set left/right pointers
+        leftArr[parentIndex] = leftNodeIndex; // Set left/right pointers
         rightArr[parentIndex] = rightNodeIndex;
 
-        messageHeap.push(parentIndex, weightArr); //    - Push new parent index back into the heap
+        messageHeap.push(parentIndex, weightArr); // Push new parent index back into the heap
     }
-    // 4. Return the index of the last remaining node (root)
-    return -1; // placeholder
-
-
-
+    cout << "Encoding Tree built! Total nodes created: " << messageHeap.size << "\n"; // Test cout for myself
+    return (nextFree - 1); // 4. Return the index of the last remaining node (root)
 }
 
 // Step 4: Use an STL stack to generate codes
 void generateCodes(int root, string codes[]) {
     // TODO:
-    // Use stack<pair<int, string>> to simulate DFS traversal.
+    if (root == -1)
+    {
+        return;
+    }
+    stack<pair<int, string>> codesStack; // Use stack<pair<int, string>> to simulate DFS traversal.
+
+    codesStack.push({root, ""}); // Traverse starts at root with empty string, because no turns have been made yet
+
+    while (!codesStack.empty())
+    {
+
+    }
     // Left edge adds '0', right edge adds '1'.
     // Record code when a leaf node is reached.
 }
