@@ -101,12 +101,11 @@ int buildEncodingTree(int nextFree) {
         int parentIndex = nextFree++; // Create a new parent node with combined weight
         weightArr[parentIndex] = weightArr[leftNodeIndex] + weightArr[rightNodeIndex];
 
-        leftArr[parentIndex] = leftNodeIndex; // Set left/right pointers
-        rightArr[parentIndex] = rightNodeIndex;
+        leftArr[parentIndex] = leftNodeIndex; // Set left pointer
+        rightArr[parentIndex] = rightNodeIndex; // Set right pointer
 
         messageHeap.push(parentIndex, weightArr); // Push new parent index back into the heap
     }
-    cout << "Encoding Tree built! Total nodes created: " << messageHeap.size << "\n"; // Test cout for myself
     return (nextFree - 1); // 4. Return the index of the last remaining node (root)
 }
 
@@ -121,12 +120,38 @@ void generateCodes(int root, string codes[]) {
 
     codesStack.push({root, ""}); // Traverse starts at root with empty string, because no turns have been made yet
 
+    // Traversal process starts
     while (!codesStack.empty())
     {
+        pair<int, string> current = codesStack.top(); // Get top element from stack
+        codesStack.pop();
 
+        int currentNodeIndex = current.first;
+        string currentCode = current.second;
+
+        // Check if node is a leaf node. Record code when a leaf node is reached.
+        if (leftArr[currentNodeIndex] == -1 && rightArr[currentNodeIndex] == -1) // Note to remove 2nd condition = still satisfies heap condition
+        {
+            char character = charArr[currentNodeIndex];
+
+            //if (character >= 'a' && character <= 'z') // Redundant from buildFrequencyTable & createLeafNodes functions
+            //{
+                codes[character - 'a'] = currentCode;
+            //}
+        }
+        else // Not a leaf node -> keep traversing
+        {
+            if (rightArr[currentNodeIndex] != -1) // Right edge adds '1'.
+            {
+                codesStack.push({rightArr[currentNodeIndex], currentCode + "1"});
+            }
+            if (leftArr[currentNodeIndex] != -1) // Left edge adds '0'
+            {
+                codesStack.push({leftArr[currentNodeIndex], currentCode + "0"});
+            }
+        }
     }
-    // Left edge adds '0', right edge adds '1'.
-    // Record code when a leaf node is reached.
+    cout << "Codes have been generated!";
 }
 
 // Step 5: Print table and encoded message
