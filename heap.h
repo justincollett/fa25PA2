@@ -16,18 +16,18 @@ struct MinHeap {
 
     void push(int idx, int weightArr[]) {
         data[size] = idx; // Insert index at end of heap
-        size++;
+        size++; // Increase size
         upheap(size - 1, weightArr); // Moves new element up
     }
 
     int pop(int weightArr[]) {
-        if (size == 0)
+        if (size == 0) // Empty heap
         {
-            return -1; // placeholder for empty heap
+            return -1;
         }
-        int smallest = data[0]; // Smallest index is the root
+        int smallest = data[0]; // Smallest index is at the root
         data[0] = data[size - 1]; // Replacing root with last element
-        size--;
+        size--; // Decrease size
         if (size > 1) // Downheap when there's at least 2 nodes for comparison
         {
             downheap(0, weightArr);
@@ -41,7 +41,7 @@ struct MinHeap {
             int parentPos = (pos - 1) / 2; // Parent index
             if (weightArr[data[pos]] < weightArr[data[parentPos]]) // Compare weights using indices from data array
             {
-                swap(data[pos], data[parentPos]);
+                swap(data[pos], data[parentPos]); // Swap indices of weightArr
                 pos = parentPos; // Move up to position of parent
             }
             else
@@ -54,19 +54,19 @@ struct MinHeap {
     void downheap(int pos, int weightArr[]) {
         while (2 * pos + 1 < size) // Existence of a left child
         {
-            int leftChild = 2 * pos + 1;
-            int rightChild = 2 * pos + 2;
-            int smallest = leftChild;
+            int leftChild = 2 * pos + 1; // Position of left child
+            int rightChild = 2 * pos + 2; // Position of right child
+            int smallest = leftChild; // Assume that left child is smallest
 
-            if (rightChild < size && weightArr[data[rightChild]] < weightArr[data[leftChild]])
+            if (rightChild < size && weightArr[data[rightChild]] < weightArr[data[leftChild]]) // Check if right child 1) exists and 2) if smaller than left child
                 {
-                    smallest = rightChild;
+                    smallest = rightChild; // Assign rightChild as smallest
                 }
-            if (weightArr[data[pos]] < weightArr[data[smallest]])
+            if (weightArr[data[pos]] < weightArr[data[smallest]]) // Heap condition is satisfied
             {
                 break;
             }
-            swap(data[pos], data[smallest]);
+            swap(data[pos], data[smallest]); // Swap
             pos = smallest; // Moving down the tree
         }
     }

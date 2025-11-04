@@ -96,8 +96,8 @@ int buildEncodingTree(int nextFree) {
     }
     while (messageHeap.size > 1) // 3. While the heap size is greater than 1:
     {
-        int leftNodeIndex = messageHeap.pop(weightArr); // Pop two smallest nodes
-        int rightNodeIndex = messageHeap.pop(weightArr);
+        int leftNodeIndex = messageHeap.pop(weightArr); // Pop first-smallest node
+        int rightNodeIndex = messageHeap.pop(weightArr); // Pop second-smallest node
         int parentIndex = nextFree++; // Create a new parent node with combined weight
         weightArr[parentIndex] = weightArr[leftNodeIndex] + weightArr[rightNodeIndex];
 
@@ -106,16 +106,12 @@ int buildEncodingTree(int nextFree) {
 
         messageHeap.push(parentIndex, weightArr); // Push new parent index back into the heap
     }
+    cout << "Encoding Tree built! Total node(s) created: " << messageHeap.size << "\n"; // Test cout for myself. Total nodes should only be 1.
     return (nextFree - 1); // 4. Return the index of the last remaining node (root)
 }
 
 // Step 4: Use an STL stack to generate codes
 void generateCodes(int root, string codes[]) {
-    // TODO:
-    if (root == -1)
-    {
-        return;
-    }
     stack<pair<int, string>> codesStack; // Use stack<pair<int, string>> to simulate DFS traversal.
 
     codesStack.push({root, ""}); // Traverse starts at root with empty string, because no turns have been made yet
@@ -124,7 +120,7 @@ void generateCodes(int root, string codes[]) {
     while (!codesStack.empty())
     {
         pair<int, string> current = codesStack.top(); // Get top element from stack
-        codesStack.pop();
+        codesStack.pop(); // Pop root to start iterative traversal
 
         int currentNodeIndex = current.first;
         string currentCode = current.second;
